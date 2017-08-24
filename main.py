@@ -9,7 +9,7 @@ data = scipy.io.loadmat('PA.mat')
 print(data.keys())
 #print(data['PA_in'])
 #print(np.shape(data['PA_in']))
-PA_in = data['PA_in'][100: 7000]
+PA_in = data['PA_in'][130: 7030]
 PA_out = data['PA_out'][115: 7015]
 plt.figure(1)
 plt.subplot(211)
@@ -32,15 +32,29 @@ for i in range( 2, I[0]):
         max_corr = CORR[i]
         k = i
 
-k = len(PA_in) - k
+k = len(PA_in) - k -1
 print("shift num: ", k)
 ## shift the data to aligned
 if k>=0:
     PA_out = PA_out[1+k: np.shape(PA_out)[0]]
+    PA_in = PA_in[1 : len(PA_out)+1]
 else:
-    PA_in = PA_in[1+k: np.shape(PA_in)[0]]
-plt.subplot(212)
+    PA_in = PA_in[1-k: np.shape(PA_in)[0]]
+    PA_out = PA_out[1 : len(PA_in)+1]
+
+print(len(PA_in), len(PA_out))
+
+plt.figure(2)
 plt.plot(np.abs(PA_in), 'r', np.abs(PA_out), 'b')
+"""
+    Pic
+    1. AM_AM
+    2. AM_PM
+"""
+plt.figure(3)
+plt.plot(np.abs(PA_in), np.abs(PA_out), 'r.')
+plt.figure(4)
+plt.plot(np.abs(PA_in), np.angle(PA_out / PA_in) *180 / np.pi, 'b.')
 
 """
     DPD ==================
